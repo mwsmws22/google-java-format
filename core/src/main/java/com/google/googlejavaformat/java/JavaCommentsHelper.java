@@ -121,10 +121,12 @@ public final class JavaCommentsHelper implements CommentsHelper {
         result.add(line);
         continue;
       }
-      while (line.length() + column0 > Formatter.MAX_LINE_LENGTH) {
-        int idx = Formatter.MAX_LINE_LENGTH - column0;
+      while (line.length() > Formatter.MAX_LINE_LENGTH - column0) {
+        int idx = line.length() - 1;
         // only break on whitespace characters, and ignore the leading `// `
-        while (idx >= 2 && !CharMatcher.whitespace().matches(line.charAt(idx))) {
+        while (idx >= 2
+            && (!CharMatcher.whitespace().matches(line.charAt(idx))
+                || idx > Formatter.MAX_LINE_LENGTH - column0)) {
           idx--;
         }
         if (idx <= 2) {
@@ -179,4 +181,3 @@ public final class JavaCommentsHelper implements CommentsHelper {
     return true;
   }
 }
-
